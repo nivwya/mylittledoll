@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Little Idol</title>
+  <!-- Irish Grover font -->
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      transition: background-color 0.4s, color 0.4s;
+      background-color: #ffffff;
+      color: #000;
+      font-family: "Irish Grover", cursive;
+    }
+    .dark-mode {
+      background-color: #1e0000;
+      color: #bada55;
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+    }
+    .box {
+      margin: 40px auto;
+      width: 80%;
+      max-width: 800px;
+      background-color: #fff8dc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background-color 0.4s;
+    }
+    .dark-mode .box {
+      background-color: #220000;
+    }
+    .title {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
+    }
+    .panel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .side-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .side-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: "Irish Grover", cursive;
+      transition: 0.3s ease;
+    }
+    .side-buttons.left button {
+      background-color: #f8bcbc;
+    }
+    .side-buttons.right button {
+      background-color: #d8b6c8;
+    }
+    .dark-mode .side-buttons.left button {
+      background-color: #594f8d;
+      color: #fff;
+    }
+    .dark-mode .side-buttons.right button {
+      background-color: #ff0080;
+      color: #fff;
+    }
+    .avatar-area {
+      width: 250px;
+      height: 250px;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+    .avatar-area img {
+      width: 150px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-toggle" id="themeToggle">☀️</div>
+  <div class="box">
+    <h1 class="title">My Little Idol</h1>
+    <div class="panel">
+      <div class="side-buttons left">
+        <button>Skin</button>
+        <button>Hair</button>
+        <button>Fit</button>
+        <button>Shoes</button>
+        <button>Default</button>
+      </div>
+      <div class="avatar-area">
+        <img src="avatar.png" alt="Avatar" />
+      </div>
+      <div class="side-buttons right">
+        <button>Download</button>
+        <button>GIF</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      if(document.body.classList.contains("dark-mode")) {
+        toggle.textContent = "🌙";
+      } else {
+        toggle.textContent = "☀️";
+      }
+    });
+  </script>
+</body>
+</html>
