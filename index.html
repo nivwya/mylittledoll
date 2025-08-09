@@ -1,137 +1,442 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Little Idol</title>
-  <!-- Irish Grover font -->
-  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <title>My Little Idol — Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Nunito+Sans:wght@300;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root{
+      --bg-light:#f1fddc;
+      --panel-light:#fff7c9;
+      --accent:#ffd1d1;
+      --muted:#f5efc6;
+      --card-shadow: rgba(0,0,0,0.12);
+      --title-font: "Mountains of Christmas", cursive;
+      --ui-font: "Nunito Sans", sans-serif;
     }
-    body {
-      transition: background-color 0.4s, color 0.4s;
-      background-color: #ffffff;
-      color: #000;
-      font-family: "Irish Grover", cursive;
+    [data-theme="dark"]{
+      --bg: #361212;
+      --panel: #1f0f45;
+      --accent: #ff6fb8;
+      --text: #c6ff2b;
+      --button-bg: #7e5da8;
+      --outer-bg: #3d0f0f;
     }
-    .dark-mode {
-      background-color: #1e0000;
-      color: #bada55;
+    [data-theme="light"]{
+      --bg: var(--bg-light);
+      --panel: #251b3d; /* fallback if needed */
+      --text: #1b1b1b;
+      --button-bg: #ffb0b0;
+      --outer-bg: #f7fde9;
     }
-    .theme-toggle {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      cursor: pointer;
-      font-size: 24px;
-      z-index: 10;
+
+    html,body{height:100%;margin:0;font-family:var(--ui-font);}
+    body{
+      background: var(--bg-light);
+      display:flex;align-items:center;justify-content:center;
+      padding:28px;
     }
-    .box {
-      margin: 40px auto;
-      width: 80%;
-      max-width: 800px;
-      background-color: #fff8dc;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      transition: background-color 0.4s;
+
+    .app{
+      width:920px;
+      max-width:95vw;
+      border-radius:6px;
+      padding:18px;
+      box-sizing:border-box;
+      position:relative;
+      border:6px solid #fff;
+      background: linear-gradient(180deg,#fff8e0,#fff0c7);
+      box-shadow: 0 8px 0 rgba(0,0,0,0.06);
     }
-    .dark-mode .box {
-      background-color: #220000;
+
+    /* top-left toggle icon */
+    .theme-toggle{
+      position:absolute;
+      left:10px; top:10px;
+      width:28px;height:28px;
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      background:transparent;
     }
-    .title {
-      text-align: center;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 10px;
+    .theme-toggle svg{width:18px;height:18px;display:block;}
+
+    .title{
+      text-align:center;
+      font-family:var(--title-font);
+      font-size:48px;
+      margin:6px 0 18px 0;
+      color:#101;
+      text-shadow:0 6px 0 rgba(0,0,0,0.05);
     }
-    .panel {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+
+    .content{
+      display:grid;
+      grid-template-columns:170px 1fr 170px;
+      gap:18px;
+      align-items:center;
+      padding:20px 26px;
+      border:6px solid rgba(0,0,0,0.02);
+      background:rgba(255,255,255,0.35);
     }
-    .side-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+
+    .left-menu, .right-menu{
+      display:flex;flex-direction:column;gap:12px;
+      align-items:flex-start;
     }
-    .side-buttons button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: "Irish Grover", cursive;
-      transition: 0.3s ease;
+
+    .left-menu button, .right-menu button{
+      width:130px;
+      border-radius:14px;
+      padding:10px 12px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+      font-family:var(--title-font);
+      letter-spacing:0.6px;
     }
-    .side-buttons.left button {
-      background-color: #f8bcbc;
+
+    /* specific colors */
+    .left-menu button{ background: #ffb9b9; color:#2c0b0b; }
+    .right-menu button{ background: #e1a9d6; color:#1c0a0a; }
+
+    .canvas-wrap{
+      background:#fff;
+      display:flex;align-items:center;justify-content:center;
+      padding:26px;
+      height:360px;
     }
-    .side-buttons.right button {
-      background-color: #d8b6c8;
+
+    .socials{
+      display:flex;justify-content:center;gap:18px;margin-top:18px;
     }
-    .dark-mode .side-buttons.left button {
-      background-color: #594f8d;
-      color: #fff;
+
+    .socials .dot{
+      width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:#000;color:#fff;font-weight:700;
     }
-    .dark-mode .side-buttons.right button {
-      background-color: #ff0080;
-      color: #fff;
+
+    /* Dark theme overrides */
+    [data-theme="dark"] body{ background: var(--outer-bg); }
+    [data-theme="dark"] .app{
+      background: linear-gradient(180deg,#1e0e3a,#23104b);
+      color:var(--text);
+      border-color:#fff;
     }
-    .avatar-area {
-      width: 250px;
-      height: 250px;
-      background-color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 20px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-    }
-    .avatar-area img {
-      width: 150px;
-      height: auto;
+    [data-theme="dark"] .title{ color: var(--text); text-shadow:none; }
+    [data-theme="dark"] .left-menu button{ background:#9d82c4; color:#191018; }
+    [data-theme="dark"] .right-menu button{ background:#ff2c8b; color:#fff; box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
+    [data-theme="dark"] .canvas-wrap{ background: #0f0f0f; border: 6px solid #fff; }
+
+    /* responsive */
+    @media (max-width:760px){
+      .content{grid-template-columns:1fr;grid-auto-rows:auto;}
+      .left-menu{flex-direction:row;justify-content:center;flex-wrap:wrap;}
+      .right-menu{flex-direction:row;justify-content:center;}
+      .left-menu button, .right-menu button{ width:110px; }
     }
   </style>
 </head>
-<body>
-  <div class="theme-toggle" id="themeToggle">☀️</div>
-  <div class="box">
-    <h1 class="title">My Little Idol</h1>
-    <div class="panel">
-      <div class="side-buttons left">
-        <button>Skin</button>
-        <button>Hair</button>
-        <button>Fit</button>
-        <button>Shoes</button>
-        <button>Default</button>
+<body data-theme="light">
+  <div class="app" id="app">
+    <div class="theme-toggle" id="themeToggle" title="Toggle light / dark">
+      <!-- sun / moon icon changes by JS -->
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="#000">
+        <path d="M12 3v2"></path>
+      </svg>
+    </div>
+
+    <div class="title">My Little Idol</div>
+
+    <div class="content" id="contentPanel">
+      <div class="left-menu">
+        <button data-action="skin">Skin</button>
+        <button data-action="hair">Hair</button>
+        <button data-action="fit">Fit</button>
+        <button data-action="shoes">Shoes</button>
+        <button data-action="default">Default</button>
       </div>
-      <div class="avatar-area">
-        <img src="avatar.png" alt="Avatar" />
+
+      <div class="canvas-wrap">
+        <canvas id="dollCanvas" width="360" height="360" style="image-rendering:pixelated;"></canvas>
       </div>
-      <div class="side-buttons right">
-        <button>Download</button>
-        <button>GIF</button>
+
+      <div class="right-menu">
+        <button id="downloadBtn">Download</button>
+        <button id="gifBtn">GIF</button>
       </div>
     </div>
+
+    <div class="socials">
+      <div class="dot">GH</div>
+      <div class="dot" style="background:#ee5960;">M</div>
+      <div class="dot">X</div>
+    </div>
   </div>
+
+  <!-- gif.js from CDN - worker script also loaded via options -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+
   <script>
-    const toggle = document.getElementById("themeToggle");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      if(document.body.classList.contains("dark-mode")) {
-        toggle.textContent = "🌙";
+    // Simple state for the doll's look
+    const state = {
+      skin: 0,
+      hair: 0,
+      fit: 0,
+      shoes: 0
+    };
+
+    const palette = {
+      skins: ['#f6d0c9','#f0bfa6','#d9a07d','#b47b55','#7f5639'],
+      hairs: ['#1b1b1b','#3a1f0b','#6b3a25','#f5d18b','#a04b9f'],
+      fits: ['#ffffff','#f7cfcf','#cbe9ff','#dfeccf','#ffd6a7'],
+      shoes: ['#fde2d6','#f7b2c9','#ffd1a6','#c2f4d8','#bdb7ff']
+    };
+
+    const canvas = document.getElementById('dollCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // initial theme toggle
+    const root = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function setTheme(t){
+      root.setAttribute('data-theme', t);
+      if(t==='dark'){
+        themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="#fff"/>';
       } else {
-        toggle.textContent = "☀️";
+        themeIcon.innerHTML = '<path d="M6.76 4.84l-1.8-1.79L3.17 4.84 4.99 6.66 6.76 4.84zM1 13h3v-2H1v2zm10 8h2v-3h-2v3zm7.24-1.16l1.79 1.79 1.8-1.8-1.79-1.79-1.8 1.8zM20 11h3v-2h-3v2zM12 5a7 7 0 100 14 7 7 0 000-14z" fill="#000"/>';
       }
+    }
+    setTheme('light');
+
+    themeToggle.addEventListener('click', ()=> {
+      const next = (root.getAttribute('data-theme')==='light') ? 'dark' : 'light';
+      setTheme(next);
     });
+
+    // Draw a stylized pixel-chibi doll using rectangles/circles (layered)
+    function drawDoll(options = state, offsetY = 0, blink=false){
+      // clear
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // background frame
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--panel') || '#fff';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      // compute center
+      const cx = canvas.width/2;
+      const cy = canvas.height/2 + offsetY;
+
+      // draw body block (pixel style)
+      // skin
+      const skin = palette.skins[options.skin % palette.skins.length];
+      ctx.fillStyle = skin;
+      // neck
+      roundRect(ctx, cx-18, cy-90, 36, 20, 6, true, false);
+      // face
+      roundRect(ctx, cx-44, cy-140, 88, 90, 12, true, false);
+
+      // hair base
+      const hair = palette.hairs[options.hair % palette.hairs.length];
+      ctx.fillStyle = hair;
+      // bangs
+      roundRect(ctx, cx-60, cy-150, 120, 40, 8, true, false);
+      // sides
+      roundRect(ctx, cx-72, cy-120, 30, 150, 10, true, false);
+      roundRect(ctx, cx+42, cy-120, 30, 150, 10, true, false);
+
+      // hair accessory (small heart)
+      ctx.fillStyle = '#ffb6d5';
+      ctx.beginPath();
+      ctx.moveTo(cx+12, cy-120);
+      ctx.bezierCurveTo(cx+6, cy-132, cx+26, cy-132, cx+20, cy-120);
+      ctx.bezierCurveTo(cx+26, cy-108, cx+6, cy-108, cx+12, cy-120);
+      ctx.fill();
+
+      // eyes
+      const eyeY = cy-90;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(cx-28, eyeY-8, 22, 16);
+      ctx.fillRect(cx+6, eyeY-8, 22, 16);
+
+      // pupils
+      ctx.fillStyle = '#3b2a2a';
+      ctx.fillRect(cx-20, eyeY-4, 8, 8);
+      ctx.fillRect(cx+14, eyeY-4, 8, 8);
+
+      // blink overlay
+      if(blink){
+        ctx.fillStyle = skin;
+        ctx.fillRect(cx-28, eyeY-1, 22, 4);
+        ctx.fillRect(cx+6, eyeY-1, 22, 4);
+      } else {
+        // blush
+        ctx.fillStyle = '#ffd1d1';
+        ctx.fillRect(cx-38, eyeY+18, 20, 8);
+        ctx.fillRect(cx+18, eyeY+18, 20, 8);
+      }
+
+      // mouth
+      ctx.fillStyle = '#d53d6a';
+      ctx.fillRect(cx-8, cy-58, 16, 6);
+
+      // outfit
+      const fit = palette.fits[options.fit % palette.fits.length];
+      ctx.fillStyle = fit;
+      roundRect(ctx, cx-46, cy-40, 92, 110, 10, true, false);
+      // collar
+      ctx.fillStyle = '#fff';
+      roundRect(ctx, cx-32, cy-40, 64, 16, 8, true, false);
+
+      // shoes
+      const shoes = palette.shoes[options.shoes % palette.shoes.length];
+      ctx.fillStyle = shoes;
+      roundRect(ctx, cx-36, cy+66, 28, 12, 6, true, false);
+      roundRect(ctx, cx+8, cy+66, 28, 12, 6, true, false);
+
+      // simple pixel outline to mimic look
+      ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(cx-44, cy-140, 88, 260);
+
+      // subtle shadow beneath
+      const grad = ctx.createRadialGradient(cx, cy+110, 10, cx, cy+110, 70);
+      grad.addColorStop(0,'rgba(0,0,0,0.08)');
+      grad.addColorStop(1,'rgba(0,0,0,0.0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(cx-70, cy+128, 140, 20);
+    }
+
+    function roundRect(ctx, x, y, w, h, r, fill, stroke){
+      if (w < 2 * r) r = w / 2;
+      if (h < 2 * r) r = h / 2;
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y,   x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x,   y+h, r);
+      ctx.arcTo(x,   y+h, x,   y,   r);
+      ctx.arcTo(x,   y,   x+w, y,   r);
+      ctx.closePath();
+      if(fill) ctx.fill();
+      if(stroke) ctx.stroke();
+    }
+
+    // initial draw
+    drawDoll();
+
+    // handlers for buttons
+    document.querySelectorAll('.left-menu button').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const action = btn.dataset.action;
+        if(action==='skin') {
+          state.skin = (state.skin + 1) % palette.skins.length;
+        } else if(action==='hair'){
+          state.hair = (state.hair + 1) % palette.hairs.length;
+        } else if(action==='fit'){
+          state.fit = (state.fit + 1) % palette.fits.length;
+        } else if(action==='shoes'){
+          state.shoes = (state.shoes + 1) % palette.shoes.length;
+        } else if(action==='default'){
+          state.skin = 0; state.hair = 0; state.fit = 0; state.shoes = 0;
+        }
+        // tiny 'bounce' animation for polish
+        animateBounce();
+      });
+    });
+
+    function animateBounce(){
+      let t=0;
+      const dur = 220;
+      const start = performance.now();
+      function step(now){
+        t = now - start;
+        const progress = Math.min(1, t/dur);
+        // ease out
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const offset = -8 * (1-ease); // move up then settle
+        // small blink on first frame
+        const blink = (progress < 0.25);
+        drawDoll(state, offset, blink);
+        if(progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Download PNG
+    const downloadBtn = document.getElementById('downloadBtn');
+    downloadBtn.addEventListener('click', ()=>{
+      // draw final (no offset)
+      drawDoll(state, 0, false);
+      const data = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = data;
+      a.download = 'my_little_idol.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // Create GIF
+    const gifBtn = document.getElementById('gifBtn');
+    gifBtn.addEventListener('click', ()=> {
+      gifBtn.disabled = true;
+      gifBtn.textContent = 'Creating...';
+
+      // create GIF with 3 frames: slight up, center (blink), down
+      const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js',
+        width: canvas.width,
+        height: canvas.height
+      });
+
+      // frame 1: up (no blink)
+      drawDoll(state, -6, false);
+      gif.addFrame(ctx, {copy: true, delay: 160});
+
+      // frame 2: center with blink
+      drawDoll(state, 0, true);
+      gif.addFrame(ctx, {copy: true, delay: 120});
+
+      // frame 3: center no blink
+      drawDoll(state, 0, false);
+      gif.addFrame(ctx, {copy: true, delay: 140});
+
+      // frame 4: down little
+      drawDoll(state, 4, false);
+      gif.addFrame(ctx, {copy: true, delay: 120});
+
+      gif.on('finished', function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'my_little_idol.gif';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        gifBtn.disabled = false;
+        gifBtn.textContent = 'GIF';
+      });
+
+      gif.on('error', function(e){
+        alert('GIF creation failed: '+ e);
+        gifBtn.disabled = false;
+        gifBtn.textContent = 'GIF';
+      });
+
+      gif.render();
+    });
+
+    // initial tiny idle loop to make UI lively
+    setInterval(()=> {
+      drawDoll(state, 0, false);
+    }, 3000);
   </script>
 </body>
 </html>
